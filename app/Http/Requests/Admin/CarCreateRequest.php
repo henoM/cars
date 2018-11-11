@@ -24,8 +24,9 @@ class CarCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'x' => 'required|regex:/^\d*(\.\d{1,9})?$/',
-            'y' => 'required|regex:/^\d*(\.\d{1,9})?$/',
+            'name' => 'required',
+            'x' => 'required|regex:/^\-?\d*(\.\d{1,9})?$/',
+            'y' => 'required|regex:/^\-?\d*(\.\d{1,9})?$/',
         ];
     }
 }

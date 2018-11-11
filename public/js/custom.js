@@ -1,39 +1,47 @@
 $(document).ready(function(){
-    // var x = 40.1051;
-    // var y = 44.3048;
-    // var name = 'mersedes';
-    // var id = 'map';
-
-    // maps(x,y,name,id);
+    var map = L.map('map', {
+        'center': [0, 0],
+        'zoom': 13,
+        'layers': [
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                'attribution': 'Map data &copy; OpenStreetMap contributors'
+            })
+        ]
+    });
+    var marker = L.marker([0, 0]).addTo(map)
+        .bindPopup('first position')
+        .openPopup();
     $(document).on('click','.car',function(){
-
+        map.removeLayer(marker);
         var id = $(this).attr('id');
-        $('#cont').html('<div id="map"+id class="vmap"></div>');
-        $('.vmap').attr('id','map'+id);
         $.ajax({
             type:'get',
             url: "car",
             data:{id:id},
+            dataType:'json',
             success:function(results){
                 var name = results.name;
                 var x =results.location.x;
                 var y =results.location.y;
-                var id = 'map'+results.id;
-                maps(x,y,name,id);
+                marker = L.marker([x, y]).addTo(map)
+                    .bindPopup(name)
+                    .openPopup();
+                setInterval(
+                    $.ajax({
+                    type:'get',
+                    url: "car",
+                    data:{id:id},
+                    dataType:'json',
+                    success:function(results){
+                        var name = results.name;
+                        var x =results.location.x;
+                        var y =results.location.y;
+                        marker = L.marker([x, y]).addTo(map)
+                            .bindPopup(name)
+                            .openPopup();
+                    }
+                }),1000);
             }
         });
     });
-    function maps(x,y,name,id){
-        var map = L.map(id).setView([x,y], 13);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        L.marker([x,y]).addTo(map)
-            .bindPopup(name)
-            .openPopup();
-    }
-
-    $("#map").remove();
 });
