@@ -17,7 +17,6 @@ $(document).ready(function(){
         ajaxCall(id);
     });
     function ajaxCall(id){
-        alert(id);
         $.ajax({
             type:'get',
             url: "car",

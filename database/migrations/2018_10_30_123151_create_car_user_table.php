@@ -15,9 +15,9 @@ class CreateCarUserTable extends Migration
     {
         Schema::create('car_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index()->nullable();
+            $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('car_id')->unsigned()->index()->nullable();
+            $table->integer('car_id')->unsigned()->index();
             $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
             $table->timestamps();
         });
