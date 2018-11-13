@@ -31,7 +31,7 @@ $(document).ready(function(){
                 marker = L.marker([x, y]).addTo(map)
                     .bindPopup(name)
                     .openPopup();
-                setTimeout(function(){ajaxCall(id)},1000);
+                setTimeout(function(){ajaxCall(id)},5000);
             }
         });
     }
