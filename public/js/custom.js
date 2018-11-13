@@ -14,6 +14,10 @@ $(document).ready(function(){
     $(document).on('click','.car',function(){
         map.removeLayer(marker);
         var id = $(this).attr('id');
+        ajaxCall(id);
+    });
+    function ajaxCall(id){
+        alert(id);
         $.ajax({
             type:'get',
             url: "car",
@@ -21,27 +25,14 @@ $(document).ready(function(){
             dataType:'json',
             success:function(results){
                 var name = results.name;
-                var x =results.location.x;
-                var y =results.location.y;
+                var x = results.location.x;
+                var y = results.location.y;
+                var id = results.id;
                 marker = L.marker([x, y]).addTo(map)
                     .bindPopup(name)
                     .openPopup();
-                setInterval(
-                    $.ajax({
-                    type:'get',
-                    url: "car",
-                    data:{id:id},
-                    dataType:'json',
-                    success:function(results){
-                        var name = results.name;
-                        var x =results.location.x;
-                        var y =results.location.y;
-                        marker = L.marker([x, y]).addTo(map)
-                            .bindPopup(name)
-                            .openPopup();
-                    }
-                }),1000);
+                setTimeout(function(){ajaxCall(id)},1000);
             }
         });
-    });
+    }
 });
