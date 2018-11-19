@@ -18,6 +18,15 @@
             </button>
         </div>
     @endif
+    @if(session('update'))
+        <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+            <span class="badge badge-pill badge-success">Success</span>
+            You successfully {{session('update')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     <div class="breadcrumbs">
         <div class="col-sm-4">
             <div class="page-header float-left">
@@ -65,6 +74,7 @@
                                         <td>{{ $car->name }}</td>
                                         <td>
                                             <a href="{{route('admin.cars.delete',$car->id)}}" class="btn btn-danger btn-xs" >Delete</a>
+                                            <a href="{{route('admin.cars.getCar',$car->id)}}" class="btn btn-success btn-xs" >Update</a>
                                         </td>
                                     </tr>
                                 @endforeach

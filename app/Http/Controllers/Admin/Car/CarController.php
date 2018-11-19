@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Car;
 
 use App\Http\Requests\Admin\CarCreateRequest;
+use App\Http\Requests\CarUpdateRequest;
 use App\Models\Car;
 use App\Models\Location;
 use Illuminate\Http\Request;
@@ -59,4 +60,23 @@ class CarController extends Controller
         return redirect()->back()->with('delete', 'user deleted');
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public  function getCar($id)
+    {
+        $location = DB::table('locations')->where('car_id',$id)->first();
+
+        return view('admin.cars.update',compact('location'));
+    }
+
+    public function update($id,CarUpdateRequest $request)
+    {
+        $data = $request->except('_token');
+
+        DB::table('locations')->where('id',$id)->update($data);
+
+        return redirect()->to('admin/car/cars')->with('update', 'coordinates updating');
+    }
 }

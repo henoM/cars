@@ -41,7 +41,7 @@ class UserController extends Controller
     {
         $cars = $request->car;
         $user =\App\User::findOrFail($id);
-        $user->cars()->sync($cars);
+        $user->cars()->syncWithoutDetaching($cars);
 
         return redirect()->to('admin/users/users')->with('attach', 'attached');
     }

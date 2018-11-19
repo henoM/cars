@@ -25,6 +25,8 @@ Route::middleware('admin')->group(function () {
              Route::get('/cars/create','CarController@create')->name('admin.cars.create');
              Route::post('/cars/store','CarController@store')->name('admin.car.store');
              Route::get('/car/delete{id}','CarController@delete')->name('admin.cars.delete');
+             Route::get('/car/getCar{id}','CarController@getCar')->name('admin.cars.getCar');
+             Route::post('/car/update{id}','CarController@update')->name('admin.cars.update');
 
          });
          Route::group(['prefix' => 'users','namespace' => 'User'], function () {
