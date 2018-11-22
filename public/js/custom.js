@@ -1,37 +1,55 @@
 $(document).ready(function(){
     var map = L.map('map', {
         'center': [0, 0],
-        'zoom': 13,
+        'zoom': 10,
         'layers': [
             L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 'attribution': 'Map data &copy; OpenStreetMap contributors'
             })
         ]
     });
-    var marker = L.marker([0, 0]).addTo(map)
-        .bindPopup('first position')
-        .openPopup();
-    $(document).on('click','.car',function(){
-        map.removeLayer(marker);
-        var id = $(this).attr('id');
-        ajaxCall(id);
+    $("#v").hide();
+    $(document).on('click','#cars',function(){
+        $("#v").show();
+        ajaxCall();
     });
-    function ajaxCall(id){
+    function ajaxCall(){
+        $.ajax({
+            type:'get',
+            url: "cars",
+            dataType:'json',
+            success:function(results){
+
+                $.each(results.cars, function (key, car) {
+                    var name = car.name;
+                    var x = car.location.x;
+                    var y = car.location.y;
+                   L.marker([x, y]).addTo(map)
+                        .bindPopup(name)
+                        .on('click', clickZoom);
+                });
+            setTimeout(function(){ajaxCall()},5000);
+            }
+        });
+    }
+    function clickZoom(e) {
+        map.setView(e.target.getLatLng(),1);
+    }
+    $(document).on('click','.car',function(){
+        var id = $(this).attr("id")
         $.ajax({
             type:'get',
             url: "car",
             data:{id:id},
             dataType:'json',
             success:function(results){
-                var name = results.name;
-                var x = results.location.x;
-                var y = results.location.y;
-                var id = results.id;
-                marker = L.marker([x, y]).addTo(map)
-                    .bindPopup(name)
-                    .openPopup();
-                setTimeout(function(){ajaxCall(id)},5000);
+
+                    var name = results.name;
+                    var x = results.location.x;
+                    var y = results.location.y;
+                    map.setView(new L.LatLng(x, y), 10);
             }
         });
-    }
+
+    });
 });
